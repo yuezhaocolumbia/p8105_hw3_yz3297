@@ -1,0 +1,35 @@
+---
+title: "p8105_hw3_yz3297"
+author: "Yue Zhao"
+date: "2018年10月12日"
+output: github_document
+---
+#Problem 1
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(p8105.datasets)
+
+data(brfss_smart2010)
+head(brfss_smart2010)
+
+brfssnew_data=brfss_smart2010 %>%
+  janitor::clean_names()  %>%
+  filter(topic=="Overall Health")   %>%
+  select(year,locationabbr, locationdesc, response, data_value)%>%
+  spread(key=response, value= data_value) %>%
+  #clean the names, filter the overall health topic, drop other variables and turning data from long to wide
+  
+  janitor::clean_names()
+  #clean the names again after spreading
+
+brfssnew_data
+
+```
+
+Answering questions:
+```{r setup, include=FALSE}
+print(count(filter(brfssnew_data,year==2002),locationabbr),n=51)
+```
+1. In 2002
