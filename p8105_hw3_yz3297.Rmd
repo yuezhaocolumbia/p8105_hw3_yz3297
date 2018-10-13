@@ -86,7 +86,6 @@ data(instacart)
 
 instacart
 
-
 ```
 
 The dimension of dataset instacart is `r nrow(instacart)` by `r ncol(instacart)`. The main variables are order_id, product_id, user_id, order_number, product_name , aisle_id, department. Above is the sample observations of the dataset. 
@@ -116,7 +115,49 @@ Question 2:
 
 To arrange this graph in "aisle name" seems impossible because the names are too long to show on the screen. Alternatively, we can use the aisle id instead. 
 
+Question 3:
+```{r}
+    instacart %>%
+     filter(aisle=="baking ingredients" | aisle=="dog food care"| aisle=="packaged vegetables fruits") %>%
+     group_by(aisle) %>%
+     count(product_name) %>%
+     filter(n==max(n) & (aisle=="baking ingredients"|aisle=="dog food care"| aisle=="packaged vegetables fruits"))
+     #choose the maximum in each category
+```
+
+This table shows the most popular item in each aisle. 
+
+
+Question 4:
+```{r}
+     instacart %>%
+       filter(product_name=="Pink Lady Apples" | product_name=="Coffee Ice Cream") %>%
+       group_by(product_name,order_dow) %>%
+       summarise(mean_1=mean(order_hour_of_day)) %>%
+       spread(key=order_dow, value=mean_1) %>%
+       rename("Sunday" = "0" ,"Monday" = "1", "Tuesday" = "2", "Wednesday" = "3", "Thursday" = "4", "Friday" = "5", "Saturday" = "6")
+```
+
+This is a 2*7 table showing for each day of the week, the mean hour of ordering for each item.
+
+
 ##Problem 3
+```{r}
+data(ny_noaa)
+
+ny_noaa
+
+```
+The dimension of dataset instacart is `r nrow(ny_noaa)` by `r ncol(ny_noaa)`. The main variables are id,date,prcp, snow, snwd, tmax, tmin.
+Above is the sample observations of the dataset. tmax and tmin are the varibles that have the most missing values. The proportion of missing data in tmax is `r 1134358/nrow(ny_noaa)*100`%. The proportion of missing data in tmin is `r 1134420/nrow(ny_noaa)*100`%. 
+
+Question 1:
+
+Question 2:
+
+Question 3: 
+
+
 
 
 
