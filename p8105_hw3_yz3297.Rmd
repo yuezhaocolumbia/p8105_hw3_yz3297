@@ -7,7 +7,7 @@ output: github_document
 #Problem 1
 
 
-```{r setup, include=FALSE}
+```{r setup}
 library(tidyverse)
 library(p8105.datasets)
 
@@ -29,7 +29,96 @@ brfssnew_data
 ```
 
 Answering questions:
-```{r setup, include=FALSE}
-print(count(filter(brfssnew_data,year==2002),locationabbr),n=51)
+```{r}
+filter(count(filter(brfssnew_data,year==2002),locationabbr), n==7)
+#select from the freqency table in 2002 to see which states appeared at 7 locations
 ```
-1. In 2002
+Question 1: In 2002, Connecticut, Florida and North Carolina were observed at 7 locations.
+
+```{r}
+    brfssnew_data %>%
+      group_by(locationabbr,year) %>%
+      summarize(n=n()) %>%
+      ggplot(aes(x = year, y = n, color = locationabbr)) + 
+      geom_point() + geom_line() + 
+      theme(legend.position = "bottom")
+```
+
+
+Question 2: Above is the spaghetti plot that shows the number of observations in each state from 2002 to 2010.
+
+```{r}
+ brfssnew_data %>%
+      filter(locationabbr=="NY", year== 2002 | year== 2006 | year==2010) %>%
+      group_by(locationabbr,year) %>%
+      summarize(mean(excellent),sd(excellent))
+
+```
+
+Question 3: This table shows the mean and standard deviation of the proportion of "excellent" in NY for the year 2002,2006,2010.
+
+```{r}
+
+
+    mean_data= brfssnew_data %>%
+      group_by(locationabbr,year) %>%
+      summarize(excellent_mean=mean(excellent),very_good_mean=mean(very_good),good_mean=mean(good),fair_mean=mean(fair),poor_mean=mean(poor)) %>%
+      gather(key=response, value= data_value, excellent_mean: poor_mean) %>%
+      na.omit()
+      
+        
+    mean_data %>%
+      ggplot(aes(x = year, y =data_value , color=locationabbr))  + 
+      geom_line() +
+      facet_grid(~response)
+    
+
+```
+
+
+Question 4: This is the panel showing for each year and state, the mean proportion of each category over time. 
+
+
+##Problem 2
+
+```{r}
+data(instacart)
+
+instacart
+
+
+```
+
+The dimension of dataset instacart is `r nrow(instacart)` by `r ncol(instacart)`. The main variables are order_id, product_id, user_id, order_number, product_name , aisle_id, department. Above is the sample observations of the dataset. 
+
+Question 1: There are `r nrow(count(instacart,aisle_id))` aisles. 
+
+
+```{r}
+aisle_count=count(instacart,aisle) %>%
+arrange(desc(n))
+print(aisle_count, n=10)
+#let's sort it by descending order and print out top ten entries
+```
+These are the top 10 aisles the most items are ordered from.
+
+Question 2: 
+
+```{r}
+
+   aisle_count2=count(instacart,aisle_id) %>%
+      arrange(desc(n))
+    
+   aisle_count2 %>%
+      ggplot(aes(x = aisle_id, y = n, color=aisle_id)) + 
+      geom_bar(stat="identity", width=0.5)
+```
+
+To arrange this graph in "aisle name" seems impossible because the names are too long to show on the screen. Alternatively, we can use the aisle id instead. 
+
+##Problem 3
+
+
+
+
+
